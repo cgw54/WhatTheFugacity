@@ -98,13 +98,13 @@ begin
 	# Let's lookup stuff that we want/need to supply to the chip to get the reactiont to go -
 	# what you feed *depends upon your product*
 	compounds_that_we_need_to_supply_feed_1 = [
-		"oxygen", "sucrose"
+	 "sucrose"
 	]
 
 	# what are the amounts that we need to supply to chip in feed stream 1 (units: mmol/hr)?
 	mol_flow_values_feed_1 = [
-		10.0 	; # oxygen mmol/hr
-		0.822 	; # sucrose mmol/hr (maybe: 0.822 or 6.1?)
+
+		1.0 	; # sucrose mmol/hr (maybe: 0.822 or 6.1?)
 	]
 
 	# what is coming into feed stream 2?
