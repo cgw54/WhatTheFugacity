@@ -4,6 +4,16 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+end
+
 # ╔═╡ 5458cafc-430a-4e2e-a3f9-d23023e6053b
 begin
 
@@ -36,20 +46,34 @@ md"""
 ## ENGRI 1120: Design and Analysis of a Sustainable Cell-Free Production Process for Industrially Important Small Molecules
 """
 
+# ╔═╡ 69791cac-077a-48db-9af9-bb44d22c18e1
+md"""
+$(PlutoUI.LocalResource(joinpath(_PATH_TO_FIGS,"WTF-Logo1.png")))
+"""
+
 # ╔═╡ 833d7250-f4ab-49a2-a43e-1b21def59ad4
 html"""
-<p style="font-size:20px;">Team name: Student name, Student name, Student name ... Student name</br>
+<p style="font-size:20px;"> What the Fugacity™: Sophie Alber, Amy Sharin, and Catherine Westbrook</br>
 Smith School of Chemical and Biomolecular Engineering, Cornell University, Ithaca NY 14850</p>
 """
 
 # ╔═╡ 251363ad-1927-4b05-99f5-8c3f2508c0cb
 md"""
 ### Introduction
+What the Fugacity™  was tasked with designing and analyzing a process to produce isoprene from sucrose. Isoprene, also known as 2-methyl- 1,3 butadiene, is a high value organic molecule. Polymers of isoprene have industrial applications including rubber for tires and moldings. Isoprene’s empirical formula is C5H8 with a molecular weight of 68.12 grams/mol and density 0.681 grams/milliliter at room temperature.
+
+Sucrose is a disaccharide sugar composed of glucose and fructose.
+
 """
 
 # ╔═╡ 884a0a7d-e5d8-4417-b109-d00c37a01766
 md"""
 ### Materials and Methods
+"""
+
+# ╔═╡ f63c2e48-7e01-4f4a-ae78-8403d90979bd
+md"""
+$(PlutoUI.LocalResource(joinpath(_PATH_TO_FIGS,"Fig-Parallel-Chips.png")))
 """
 
 # ╔═╡ ad5d595e-4dba-49cd-a446-e1df737fd75d
@@ -68,7 +92,7 @@ begin
 	# rn:28235c0c-ec00-4a11-8acb-510b0f2e2687 = PGDN
 	# rn:rn:R09799 = Hydrazine
 	# rn:R03119 = 3G
-	idx_target_rate = find_reaction_index(MODEL,:reaction_number=>"rn:R03119")
+	idx_target_rate = find_reaction_index(MODEL,:reaction_number=>"rn:R08199")
 	# ================================================================================= #
 
 	# First, let's build the stoichiometric matrix from the model object -
@@ -103,18 +127,17 @@ begin
 
 	# what are the amounts that we need to supply to chip in feed stream 1 (units: mmol/hr)?
 	mol_flow_values_feed_1 = [
-
-		1.0 	; # sucrose mmol/hr (maybe: 0.822 or 6.1?)
+		1 	; # sucrose mmol/hr (maybe: 0.822 or 6.1?)
 	]
 
 	# what is coming into feed stream 2?
 	compounds_that_we_need_to_supply_feed_2 = [
-		"glycerol"
+		
 	]
 
 	# let's always add Vₘ into feed stream 2
 	mol_flow_values_feed_2 = [
-		Vₘ 		; # glycerol mmol/hr
+
 	]
 	
 	
@@ -289,15 +312,15 @@ end
 
 # ╔═╡ 80205dc2-0cd9-4543-be6c-2b3a7a5010d5
 # How many chips do we want to operate in parallel?
-number_of_chips = 10;
+number_of_chips = 1000;
 
 # ╔═╡ eb091c37-29f6-45e8-8716-126c2df7f125
 # how many levels are we going to have in the separation tree?
-number_of_levels = 7;
+number_of_levels = 8;
 
 # ╔═╡ 65c26314-f7de-42c7-978c-5fe18ef45850
 # what compound are we trying to separate?
-idx_target_compound = find_compound_index(MODEL,:compound_name=>"propane-1,3-diol");
+idx_target_compound = find_compound_index(MODEL,:compound_name=>"isoprene");
 
 # ╔═╡ fe1a84e2-0a44-4341-9add-35f8bb296454
 begin
@@ -384,6 +407,10 @@ begin
 	# make a 0.95 line target line -
 	target_line = 0.95*ones(number_of_levels)
 	plot!(stages, target_line, color="red", lw=2,linestyle=:dash, label="Target 95% purity")
+
+	# make a 0.995 line target line -
+	goal_line = 0.995*ones(number_of_levels)
+	plot!(stages, goal_line, color="orange", lw=2,linestyle=:dot, label="Analytical Standard")
 end
 
 # ╔═╡ 4a308e7a-0149-4816-a24e-ecf23c0a759c
@@ -404,6 +431,75 @@ with_terminal() do
 	# write the table -
 	pretty_table(state_table; header=state_table_header_row)
 end
+
+# ╔═╡ dc8a4da9-a36a-4b32-8ed4-aff93bc48d1f
+md"""
+#### Net Present Value Calculation
+Net present value (NPV) can be used to evaluate this project's value as compared to other investments. NPV is the net cash flow for each time period discounted back to the present value:
+
+$$NPV = CF_{1}+\sum_{i=2}^{T}\left(\frac{1}{d_{i1}}\right)CF_{i}$$
+
+where the discount factor term is given by:
+
+$$d_{i1} = \left[\prod_{j=1}^{i-1}\left(1+r_{j+1,j}\right)\right]\qquad{i=2,3,\dots,T}$$
+"""
+
+# ╔═╡ 4774e88e-0eb9-4738-8259-c11206c48f7f
+md"""
+### Over a 10 Year Period
+Over the project lifetime, the Net Present Value calcuations show the strength of investing in What the Fugacity Isoprene production. In a 10 year run of WTF Systems (T= 10), where we pay off all fixed capital costs in the first year of production (T=0), the NPV presents as follows:
+"""
+
+# ╔═╡ 711a2729-acf7-445d-af0f-78d079f90647
+T=10
+
+# ╔═╡ 1b8d298f-0c7a-4d52-8d1b-e1ce2b2e7c8d
+md"""
+__Discount Rate__: $(@bind discount_rate_flag Select(["first"=>"1%","second"=>"10%"]))
+"""
+
+# ╔═╡ 9022e5b2-bdbb-4437-81c7-807cad9dc3e0
+begin
+
+	# setup discount specific items -
+	if (isequal(discount_rate_flag, "first") == true)
+		discount_rate = 0.01;
+	elseif (isequal(discount_rate_flag, "second") == true)
+		discount_rate = 0.10;
+	end
+	nothing
+
+end
+
+
+# ╔═╡ 42a0c538-05a4-4a2a-abc2-49b87b0d6b04
+#Setting up the cash flow array -
+# we pay in year 1: $101,160 on capital and the net cash flow per year assuming 365 days per year and 24 hours a day is $2,521,229.06
+# we make in year(s) 2,3,4,5,6,7,8,9,10: $2,521,229.06 (in,+ve)
+CF_array = [2420069.06, 2521229.06, 2521229.06, 2521229.06, 2521229.06, 2521229.06, 2521229.06,2521229.06, 2521229.06, 2521229.06, 2521229.06]
+
+# ╔═╡ 592e3852-c220-45f8-a4b8-62414302d864
+# compute the discount terms -
+begin
+	
+	# main -
+	discount_array = ones(T+1)
+	for time_index = 2:(T+1)
+    	tmp_term = (1+discount_rate)^(time_index-1)
+    	discount_array[time_index] = tmp_term
+	end
+	
+	# return -
+	nothing
+end
+
+# ╔═╡ 848d4988-c71f-412a-8dd9-c7624de75899
+# what is the PV?
+PV = CF_array.*(1.0./discount_array)
+
+# ╔═╡ 79b3f880-c870-47fd-ada0-9695a69e5b76
+# what is the NPV?
+NPV = sum(PV)
 
 # ╔═╡ fd339470-ffef-49fa-8636-dce7924e6405
 md"""
@@ -1486,23 +1582,34 @@ version = "0.9.1+5"
 
 # ╔═╡ Cell order:
 # ╟─6f9851d0-9573-4965-8456-92d2c57afa91
+# ╟─69791cac-077a-48db-9af9-bb44d22c18e1
 # ╟─833d7250-f4ab-49a2-a43e-1b21def59ad4
 # ╟─251363ad-1927-4b05-99f5-8c3f2508c0cb
 # ╟─884a0a7d-e5d8-4417-b109-d00c37a01766
+# ╠═f63c2e48-7e01-4f4a-ae78-8403d90979bd
 # ╟─ad5d595e-4dba-49cd-a446-e1df737fd75d
 # ╠═5bfdf6f9-2927-4a9a-a386-8840c676329b
 # ╟─e8a4faf8-2285-4544-830c-f39d3847e8cc
-# ╟─10424555-39cc-4ddf-8c22-db91cf102bfd
+# ╠═10424555-39cc-4ddf-8c22-db91cf102bfd
 # ╟─a3632011-833e-431b-b08f-f2896ad0a82a
-# ╠═39f3633e-b9df-4d01-946f-ba2d6c8ba6b7
+# ╟─39f3633e-b9df-4d01-946f-ba2d6c8ba6b7
 # ╟─4b3ef98c-d304-4ef4-95ef-f1d1ce562e36
 # ╟─7166a917-b676-465c-a441-4ff0530faf92
 # ╠═80205dc2-0cd9-4543-be6c-2b3a7a5010d5
 # ╠═eb091c37-29f6-45e8-8716-126c2df7f125
 # ╠═65c26314-f7de-42c7-978c-5fe18ef45850
 # ╟─fe1a84e2-0a44-4341-9add-35f8bb296454
-# ╠═efe968b6-4914-4c4c-a2fb-50d7e71f582b
-# ╠═4a308e7a-0149-4816-a24e-ecf23c0a759c
+# ╟─efe968b6-4914-4c4c-a2fb-50d7e71f582b
+# ╟─4a308e7a-0149-4816-a24e-ecf23c0a759c
+# ╠═dc8a4da9-a36a-4b32-8ed4-aff93bc48d1f
+# ╟─4774e88e-0eb9-4738-8259-c11206c48f7f
+# ╟─711a2729-acf7-445d-af0f-78d079f90647
+# ╠═1b8d298f-0c7a-4d52-8d1b-e1ce2b2e7c8d
+# ╠═9022e5b2-bdbb-4437-81c7-807cad9dc3e0
+# ╠═42a0c538-05a4-4a2a-abc2-49b87b0d6b04
+# ╠═592e3852-c220-45f8-a4b8-62414302d864
+# ╟─848d4988-c71f-412a-8dd9-c7624de75899
+# ╟─79b3f880-c870-47fd-ada0-9695a69e5b76
 # ╠═fd339470-ffef-49fa-8636-dce7924e6405
 # ╠═2f2713eb-a958-4d1a-a1cc-2723ea13c38c
 # ╠═5458cafc-430a-4e2e-a3f9-d23023e6053b
