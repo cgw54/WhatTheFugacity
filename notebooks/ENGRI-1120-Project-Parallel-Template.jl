@@ -53,7 +53,7 @@ $(PlutoUI.LocalResource(joinpath(_PATH_TO_FIGS,"WTF-Logo1.png")))
 
 # ╔═╡ 833d7250-f4ab-49a2-a43e-1b21def59ad4
 html"""
-<p style="font-size:20px;"> What the Fugacity™: Sophie Alber, Amy Sharin, and Catherine Westbrook</br>
+<p style="font-size:20px;"> What the Fugacity™: Sophie Alber, Amy Sharin, and Cate Westbrook</br>
 Smith School of Chemical and Biomolecular Engineering, Cornell University, Ithaca NY 14850</p>
 """
 
@@ -93,7 +93,7 @@ To separate isoprene from sucrose and various other byproducts, we used MSU’s 
 
 Assumptions: All streams can be assumed to be ideal, at atmospheric pressure and isothermal.
 The  two-channel syringe pumps can be fed by infinite volume syringes and have negligible power consumption. Stream splitters and mixing units are isothermal. 
-All reactors are well-mixed, isothermal, and at steady state. They operate at the optimum temperature, 25oC, at a constant P. MSU’s require no power and are isothermal. 
+All reactors are well-mixed, isothermal, and at steady state. They operate at the optimum temperature, 25° C, at a constant P. MSU’s require no power and are isothermal. 
 
 """
 
@@ -148,7 +148,7 @@ begin
 
 	# what are the amounts that we need to supply to chip in feed stream 1 (units: mmol/hr)?
 	mol_flow_values_feed_1 = [
-		1 	; # sucrose mmol/hr (maybe: 0.822 or 6.1?)
+		1; # sucrose mmol/hr
 	]
 
 	# what is coming into feed stream 2?
@@ -464,13 +464,13 @@ Where $CF_{i}$ is the net cash flow in year i and the discount factor term $d_{i
 
 $$d_{i1} = \left[\prod_{j=1}^{i-1}\left(1+r_{j+1,j}\right)\right]\qquad{i=2,3,\dots,T}$$
 
-To determine the net cash flow, What the Fugacity calculated the costs of fixed capital and operation. As given by VarnerLab, a syringe pump costs $1,000 and a single reactor costs $100. With 1000 reactors and one syringe pump, we spend $101,000 on upstream units. Note that all mixers and splitters were free. What the Fugacity’s downstream units consisted of 8 magical separation units valued at $20 each. Thus, the total cost for fixed capital was $101,160. This cost will be paid back in year one of the project. 
+To determine the net cash flow, What the Fugacity calculated the costs of fixed capital and operation. As given by VarnerLab, a syringe pump costs \$1,000 and a single reactor costs \$100. With 1000 reactors and one syringe pump, we spend \$101,000 on upstream units. Note that all mixers and splitters were free. What the Fugacity’s downstream units consisted of 8 magical separation units valued at \$20 each. Thus, the total cost for fixed capital was \$101,160. This cost will be paid back in year one of the project. 
 
-Further analysis of operational costs includes the costs of chemicals inputted into the reactor chips. After looking at expensive compounds that optimized the rate of production in a single chip, we arrived on supplying only our required sugar in our feedstock. Sucrose was comparatively cheap and thus minimized our yearly operational costs. Instead of using a small number of efficient reactors, What the Fugacity wants to make money by paying off a large number of chips initially and minimizing yearly costs. To calculate yearly cost, we started by finding the number of moles of sucrose needed per year. With the assumption that What the Fugacity’s labs run 24 hours a day for 365 days per year and the knowledge that 1 mole of sucrose was used per hour, we found that we needed 8,760 moles/year. We consulted Sigma Aldrich and found the cost of 5 kilograms (or 14.61 moles) of sucrose was $222. Thus we need 599.59 packages per year, spending $133,108.98.
+Further analysis of operational costs includes the costs of chemicals inputted into the reactor chips. After looking at expensive compounds that optimized the rate of production in a single chip, we arrived on supplying only our required sugar in our feedstock. Sucrose was comparatively cheap and thus minimized our yearly operational costs. Instead of using a small number of efficient reactors, What the Fugacity wants to make money by paying off a large number of chips initially and minimizing yearly costs. To calculate yearly cost, we started by finding the number of moles of sucrose needed per year. With the assumption that What the Fugacity’s labs run 24 hours a day for 365 days per year and the knowledge that 1 mole of sucrose was used per hour, we found that we needed 8,760 moles/year. We consulted Sigma Aldrich and found the cost of 5 kilograms (or 14.61 moles) of sucrose was \$222. Thus we need 599.59 packages per year, spending \$133,108.98.
 
-The production of isoprene 24/7/365 at 99.6% and 7.4816 mL/hr —calculated from mass flow rate out * density— yielded 65,538.816 mL/year. From Sigma Aldrich, analytical standard isoprene sells at $40.50/mL. Thus, total revenue from one year is 2,654,322.05.
+The production of isoprene 24/7/365 at 99.6% and 7.4816 mL/hr —calculated from mass flow rate out x density— yielded 65,538.816 mL/year. From Sigma Aldrich, analytical standard isoprene sells at \$40.50/mL. Thus, total revenue from one year is \$2,654,322.05.
 
-Assuming our lab is run by robots given to us by a government grant and no maintenance costs are necessary (because VarnerLab machinery is flawless), these are our only cash flows. Thus, with costs negative and revenue positive, cash flow in year one (with fixed capital) will be $2,420,053.07 and in all subsequent years will be $2,521,213.07.
+Assuming our lab is run by robots given to us by a government grant and no maintenance costs are necessary (because VarnerLab machinery is flawless), these are our only cash flows. Thus, with costs negative and revenue positive, cash flow in year one (with fixed capital) will be \$2,420,053.07 and in all subsequent years will be \$2,521,213.07.
 
 """
 
@@ -504,8 +504,8 @@ end
 
 # ╔═╡ 42a0c538-05a4-4a2a-abc2-49b87b0d6b04
 #Setting up the cash flow array -
-# we pay in year 1: $101,160 on capital and the net cash flow per year assuming 365 days per year and 24 hours a day is $2,521,229.06
-# we make in year(s) 2,3,4,5,6,7,8,9,10: $2,521,229.06 (in,+ve)
+# we pay in year 1: $101,160 on capital and the net cash flow per year assuming 365 days per year and 24 hours a day is $2521213.07
+# we make in year(s) 2,3,4,5,6,7,8,9,10: $2521213.07
 CF_array = [2420053.07, 2521213.07, 2521229.07, 2521229.07, 2521229.07, 2521229.07, 2521229.07,2521229.07, 2521229.07, 2521229.07, 2521229.07]
 
 # ╔═╡ 592e3852-c220-45f8-a4b8-62414302d864
@@ -1628,8 +1628,8 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╟─6f9851d0-9573-4965-8456-92d2c57afa91
-# ╟─69791cac-077a-48db-9af9-bb44d22c18e1
+# ╠═6f9851d0-9573-4965-8456-92d2c57afa91
+# ╠═69791cac-077a-48db-9af9-bb44d22c18e1
 # ╟─833d7250-f4ab-49a2-a43e-1b21def59ad4
 # ╟─251363ad-1927-4b05-99f5-8c3f2508c0cb
 # ╟─884a0a7d-e5d8-4417-b109-d00c37a01766
@@ -1653,7 +1653,7 @@ version = "0.9.1+5"
 # ╟─dc8a4da9-a36a-4b32-8ed4-aff93bc48d1f
 # ╟─4774e88e-0eb9-4738-8259-c11206c48f7f
 # ╟─711a2729-acf7-445d-af0f-78d079f90647
-# ╠═1b8d298f-0c7a-4d52-8d1b-e1ce2b2e7c8d
+# ╟─1b8d298f-0c7a-4d52-8d1b-e1ce2b2e7c8d
 # ╠═9022e5b2-bdbb-4437-81c7-807cad9dc3e0
 # ╠═42a0c538-05a4-4a2a-abc2-49b87b0d6b04
 # ╠═592e3852-c220-45f8-a4b8-62414302d864
@@ -1661,8 +1661,8 @@ version = "0.9.1+5"
 # ╠═79b3f880-c870-47fd-ada0-9695a69e5b76
 # ╟─fd339470-ffef-49fa-8636-dce7924e6405
 # ╟─2f2713eb-a958-4d1a-a1cc-2723ea13c38c
-# ╠═5458cafc-430a-4e2e-a3f9-d23023e6053b
+# ╟─5458cafc-430a-4e2e-a3f9-d23023e6053b
 # ╟─cef22b5d-be5d-49f2-987f-77cf1b9379b9
-# ╠═213d4486-584f-11ec-2373-5d05e90dc5f8
+# ╟─213d4486-584f-11ec-2373-5d05e90dc5f8
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
